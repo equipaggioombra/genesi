@@ -76,14 +76,13 @@ for item in data:
         cron = f"{minute} {hour + 7} * * *"
         filename_output_aci = f".github/workflows/{REPO_NAME}_aci.yml" 
         with open(os.path.join(FOLDER_PATH, filename_original_aci), 'r') as fileaci :
-            filedataaci = file.read()
+            filedataaci = fileaci.read()
         filedataaci = filedataaci.replace('__name__'      , REPO_NAME)
         filedataaci = filedataaci.replace('__cron__'      , cron)
         filedataaci = filedataaci.replace('__affinity__'  , item["id"])
         filedataaci = filedataaci.replace('__account__'   , item["account"])
         with open(os.path.join(FOLDER_PATH, filename_output_aci), 'w') as fileaci:
-            file.write(filedataaci)
-
+            fileaci.write(filedataaci)
 
         # Add the files from the folder to the repository
         exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_aci.yml"]
