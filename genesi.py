@@ -72,17 +72,17 @@ for item in data:
         with open(os.path.join(FOLDER_PATH, filename_output), 'w') as file:
             file.write(filedata)
 
-        print('Add files to repository aci')
-        cron = f"{minute} {hour + 7} * * *"
-        filename_output_az = f".github/workflows/{REPO_NAME}_az.yml" 
-        with open(os.path.join(FOLDER_PATH, filename_original_az), 'r') as file :
-            filedata = file.read()
-        filedata = filedata.replace('__name__'      , REPO_NAME)
-        filedata = filedata.replace('__cron__'      , cron)
-        filedata = filedata.replace('__affinity__'  , item["id"])
-        filedata = filedata.replace('__account__'   , item["account"])
-        with open(os.path.join(FOLDER_PATH, filename_output_az), 'w') as file:
-            file.write(filedata)
+        #print('Add files to repository az')
+        #cron = f"{minute} {hour + 7} * * *"
+        #filename_output_az = f".github/workflows/{REPO_NAME}_az.yml" 
+        #with open(os.path.join(FOLDER_PATH, filename_original_az), 'r') as file :
+        #    filedata = file.read()
+        #filedata = filedata.replace('__name__'      , REPO_NAME)
+        #filedata = filedata.replace('__cron__'      , cron)
+        #filedata = filedata.replace('__affinity__'  , item["id"])
+        #filedata = filedata.replace('__account__'   , item["account"])
+        #with open(os.path.join(FOLDER_PATH, filename_output_az), 'w') as file:
+        #    file.write(filedata)
 
         # Add the files from the folder to the repository
         exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_az.yml"]
@@ -97,7 +97,7 @@ for item in data:
                 print(file_path_relative)
                 repo.create_file(file_path_relative, f"Added {file_path_relative}", contents)
         os.remove(f"{FOLDER_PATH}/{filename_output}")
-        os.remove(f"{FOLDER_PATH}/{filename_output_az}")
+        #os.remove(f"{FOLDER_PATH}/{filename_output_az}")
         print('Add files to repository completed')
 
         print('Creation secret')
