@@ -34,5 +34,6 @@ jobs:
         CONTAINER_USER: ${{ secrets.CONTAINER_USER }}
         CONTAINER_PASS: ${{ secrets.CONTAINER_PASS }}
         MATRIX: ${{ secrets.MATRIX }}
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       run: |
         python genesi.py
