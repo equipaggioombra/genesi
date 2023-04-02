@@ -1,11 +1,11 @@
-name: ACI
+name: __name___ACI
 on:
   workflow_dispatch:
     inputs:
       accounts_ondemand:
         description: 'Enter the accounts, separated by commas'
   schedule:
-    - cron: "23 18 * * *"
+    - cron: '__cron__'
 
 env:
   ACI_PREFIX: "aci"
@@ -28,7 +28,7 @@ jobs:
           echo "The accounts input is empty."
           echo $(echo ${{ secrets.MATRIX }} | base64 --decode) > originalData.json
           echo 'IDs<<EOF' >> $GITHUB_OUTPUT
-          jq "[.[] | { the_id: .id }]" originalData.json >> $GITHUB_OUTPUT
+          jq '[.[] | select(.affinity=="__affinity__") | { the_id: .id }]' originalData.json >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           rm -f originalData.json
         else
@@ -111,7 +111,7 @@ jobs:
             GOOGLE_SHEETS_TAB_NAME=${{ secrets.GOOGLE_SHEETS_TAB_NAME }} \
             USER=${{ steps.sets-secrets.outputs.secret-user }} \
             PASS=${{ steps.sets-secrets.outputs.secret-pass }}
-
+            
             #TELEGRAM_API_TOKEN=${{ secrets.TELEGRAM_API_TOKEN }} \
             #TELEGRAM_USERID=${{ secrets.TELEGRAM_USERID }} \
 
@@ -156,4 +156,4 @@ jobs:
         to: ${{ secrets.TELEGRAM_USERID }}
         token: ${{ secrets.TELEGRAM_API_TOKEN }}
         message: |
-          Job for account Az - vitellaisolante was executed!
+          Job for account Az __affinity__ - __account__ was executed!
