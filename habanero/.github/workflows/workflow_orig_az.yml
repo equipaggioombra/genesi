@@ -1,4 +1,4 @@
-name: __name___ACI
+name: __name___az
 on:
   workflow_dispatch:
     inputs:
