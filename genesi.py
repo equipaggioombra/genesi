@@ -72,17 +72,17 @@ for item in data:
         with open(os.path.join(FOLDER_PATH, filename_output), 'w') as file:
             file.write(filedata)
 
-        #print('Add files to repository aci')
-        #cron = f"{minute} {hour + 7} * * *"
-        #filename_output_aci = f".github/workflows/{REPO_NAME}_aci.yml" 
-        #with open(os.path.join(FOLDER_PATH, filename_original_aci), 'r') as file :
-        #    filedataaci = file.read()
-        #filedataaci = filedataaci.replace('__name__'      , REPO_NAME)
-        #filedataaci = filedataaci.replace('__cron__'      , cron)
-        #filedataaci = filedataaci.replace('__affinity__'  , item["id"])
-        #filedataaci = filedataaci.replace('__account__'   , item["account"])
-        #with open(os.path.join(FOLDER_PATH, filename_output_aci), 'w') as file:
-        #    file.write(filedataaci)
+        print('Add files to repository aci')
+        cron = f"{minute} {hour + 7} * * *"
+        filename_output_aci = f".github/workflows/{REPO_NAME}_aci.yml" 
+        with open(os.path.join(FOLDER_PATH, filename_original_aci), 'r') as fileaci :
+            filedataaci = file.read()
+        filedataaci = filedataaci.replace('__name__'      , REPO_NAME)
+        filedataaci = filedataaci.replace('__cron__'      , cron)
+        filedataaci = filedataaci.replace('__affinity__'  , item["id"])
+        filedataaci = filedataaci.replace('__account__'   , item["account"])
+        with open(os.path.join(FOLDER_PATH, filename_output_aci), 'w') as fileaci:
+            file.write(filedataaci)
 
 
         # Add the files from the folder to the repository
@@ -98,7 +98,7 @@ for item in data:
                 print(file_path_relative)
                 repo.create_file(file_path_relative, f"Added {file_path_relative}", contents)
                 os.remove(f"{FOLDER_PATH}/{filename_output}")
-                #os.remove(f"{FOLDER_PATH}/{filename_output_aci}")
+                os.remove(f"{FOLDER_PATH}/{filename_output_aci}")
 
         print('Add files to repository completed')
 
