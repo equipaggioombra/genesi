@@ -15,7 +15,7 @@ from github import Github
 # Set the path of the folder to upload to the repository
 FOLDER_PATH = "habanero"
 filename_original = ".github/workflows/workflow_orig.yml"
-filename_original_aci = ".github/workflows/workflow_orig_aci.yml"
+filename_original_az = ".github/workflows/workflow_orig_az.yml"
 
 ACCOUNTS = os.environ['GH_ACCOUNTS_B64']
 ACCOUNTS = base64.b64decode(ACCOUNTS).decode("utf-8")
@@ -74,18 +74,18 @@ for item in data:
 
         print('Add files to repository aci')
         cron = f"{minute} {hour + 7} * * *"
-        filename_output_aci = f".github/workflows/{REPO_NAME}_aci.yml" 
-        with open(os.path.join(FOLDER_PATH, filename_original_aci), 'r') as fileaci :
-            filedataaci = fileaci.read()
-        filedataaci = filedataaci.replace('__name__'      , REPO_NAME)
-        filedataaci = filedataaci.replace('__cron__'      , cron)
-        filedataaci = filedataaci.replace('__affinity__'  , item["id"])
-        filedataaci = filedataaci.replace('__account__'   , item["account"])
-        with open(os.path.join(FOLDER_PATH, filename_output_aci), 'w') as fileaci:
-            fileaci.write(filedataaci)
+        filename_output_az = f".github/workflows/{REPO_NAME}_az.yml" 
+        with open(os.path.join(FOLDER_PATH, filename_original_az), 'r') as file :
+            filedata = file.read()
+        filedata = filedata.replace('__name__'      , REPO_NAME)
+        filedata = filedata.replace('__cron__'      , cron)
+        filedata = filedata.replace('__affinity__'  , item["id"])
+        filedata = filedata.replace('__account__'   , item["account"])
+        with open(os.path.join(FOLDER_PATH, filename_output_az), 'w') as file:
+            file.write(filedata)
 
         # Add the files from the folder to the repository
-        exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_aci.yml"]
+        exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_az.yml"]
         for dirname, _, filenames in os.walk(FOLDER_PATH):
             for filename in filenames:
                 if filename in exclude_list:
@@ -96,9 +96,8 @@ for item in data:
                 file_path_relative = os.path.relpath(file_path, FOLDER_PATH)
                 print(file_path_relative)
                 repo.create_file(file_path_relative, f"Added {file_path_relative}", contents)
-                os.remove(f"{FOLDER_PATH}/{filename_output}")
-                os.remove(f"{FOLDER_PATH}/{filename_output_aci}")
-
+        os.remove(f"{FOLDER_PATH}/{filename_output}")
+        os.remove(f"{FOLDER_PATH}/{filename_output_az}")
         print('Add files to repository completed')
 
         print('Creation secret')
