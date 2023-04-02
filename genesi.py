@@ -17,9 +17,10 @@ FOLDER_PATH = "habanero"
 filename_original = ".github/workflows/workflow_orig.yml"
 filename_original_aci = ".github/workflows/workflow_orig_aci.yml"
 
-#ACCOUNTS = "W3sKICAiaWQiOiAiMiIsCiAgImFjY291bnQiOiAiYWMzMzRub3hAb3V0bG9vay5jb20iLAogICJ0b2tlbiI6ICJEYm1oSnAzdURDTjYiCiB9LCB7CiAgImlkIjogIjEiLAogICJhY2NvdW50IjogImFjMzM0bm94QG91dGxvb2suY29tIiwKICAidG9rZW4iOiAiRGJtaEpwM3VEQ042Igp9XQ=="
 ACCOUNTS = os.environ['GH_ACCOUNTS_B64']
 ACCOUNTS = base64.b64decode(ACCOUNTS).decode("utf-8")
+#ACCOUNTS = "W3sKICAiaWQiOiAiMiIsCiAgImFjY291bnQiOiAiYWMzMzRub3hAb3V0bG9vay5jb20iLAogICJ0b2tlbiI6ICJEYm1oSnAzdURDTjYiCiB9LCB7CiAgImlkIjogIjEiLAogICJhY2NvdW50IjogImFjMzM0bm94QG91dGxvb2suY29tIiwKICAidG9rZW4iOiAiRGJtaEpwM3VEQ042Igp9XQ=="
+
 #print(ACCOUNTS)
 
 data = json.loads(ACCOUNTS)
@@ -71,16 +72,17 @@ for item in data:
         with open(os.path.join(FOLDER_PATH, filename_output), 'w') as file:
             file.write(filedata)
 
+        print('Add files to repository aci')
         cron = f"{minute} {hour + 7} * * *"
         filename_output_aci = f".github/workflows/{REPO_NAME}_aci.yml" 
         with open(os.path.join(FOLDER_PATH, filename_original_aci), 'r') as file :
-            filedata = file.read()
-        filedata = filedata.replace('__name__'      , REPO_NAME)
-        filedata = filedata.replace('__cron__'      , cron)
-        filedata = filedata.replace('__affinity__'  , item["id"])
-        filedata = filedata.replace('__account__'   , item["account"])
+            filedataaci = file.read()
+        filedataaci = filedataaci.replace('__name__'      , REPO_NAME)
+        filedataaci = filedataaci.replace('__cron__'      , cron)
+        filedataaci = filedataaci.replace('__affinity__'  , item["id"])
+        filedataaci = filedataaci.replace('__account__'   , item["account"])
         with open(os.path.join(FOLDER_PATH, filename_output_aci), 'w') as file:
-            file.write(filedata)
+            file.write(filedataaci)
 
         # Add the files from the folder to the repository
         exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_aci.yml"]
