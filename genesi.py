@@ -15,6 +15,7 @@ from github import Github
 # Set the path of the folder to upload to the repository
 FOLDER_PATH = "habanero"
 filename_original = ".github/workflows/workflow_orig.yml"
+filename_original_aci = ".github/workflows/workflow_orig_aci.yml"
 
 #ACCOUNTS = "W3sKICAiaWQiOiAiMiIsCiAgImFjY291bnQiOiAiYWMzMzRub3hAb3V0bG9vay5jb20iLAogICJ0b2tlbiI6ICJEYm1oSnAzdURDTjYiCiB9LCB7CiAgImlkIjogIjEiLAogICJhY2NvdW50IjogImFjMzM0bm94QG91dGxvb2suY29tIiwKICAidG9rZW4iOiAiRGJtaEpwM3VEQ042Igp9XQ=="
 ACCOUNTS = os.environ['GH_ACCOUNTS_B64']
@@ -24,7 +25,7 @@ ACCOUNTS = base64.b64decode(ACCOUNTS).decode("utf-8")
 data = json.loads(ACCOUNTS)
 
 message = "Jobs will start tomorrow at:\n"
-startHours = 8
+startHours = 7
 endHours = 11
 
 for item in data:
@@ -52,25 +53,37 @@ for item in data:
         hour = random.randint(startHours, endHours)
         minute = random.randint(0, 59)
         cron = f"{minute} {hour} * * *"
+
         #message = message + f"{hour}:{minute} for {item['id']} - {item['account']}\n"
         message = message + f"{str(hour).zfill(2)}:{str(minute).zfill(2)} for {str(item['id']).zfill(3)} - {item['account']}\n"
 
         repo = g.get_user().create_repo(REPO_NAME)
-
         print(f"Repository {REPO_NAME} creata correttamente")
-        filename_output = f".github/workflows/{REPO_NAME}.yml" 
+
         print('Add files to repository')
+        filename_output = f".github/workflows/{REPO_NAME}.yml" 
         with open(os.path.join(FOLDER_PATH, filename_original), 'r') as file :
             filedata = file.read()
         filedata = filedata.replace('__name__'      , REPO_NAME)
         filedata = filedata.replace('__cron__'      , cron)
         filedata = filedata.replace('__affinity__'  , item["id"])
         filedata = filedata.replace('__account__'   , item["account"])
-
         with open(os.path.join(FOLDER_PATH, filename_output), 'w') as file:
             file.write(filedata)
+
+        cron = f"{minute} {hour + 7} * * *"
+        filename_output_aci = f".github/workflows/{REPO_NAME}_aci.yml" 
+        with open(os.path.join(FOLDER_PATH, filename_original_aci), 'r') as file :
+            filedata = file.read()
+        filedata = filedata.replace('__name__'      , REPO_NAME)
+        filedata = filedata.replace('__cron__'      , cron)
+        filedata = filedata.replace('__affinity__'  , item["id"])
+        filedata = filedata.replace('__account__'   , item["account"])
+        with open(os.path.join(FOLDER_PATH, filename_output_aci), 'w') as file:
+            file.write(filedata)
+
         # Add the files from the folder to the repository
-        exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_aci.yml"]
+        exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_aci.yml"]
         for dirname, _, filenames in os.walk(FOLDER_PATH):
             for filename in filenames:
                 if filename in exclude_list:
@@ -82,10 +95,11 @@ for item in data:
                 print(file_path_relative)
                 repo.create_file(file_path_relative, f"Added {file_path_relative}", contents)
                 os.remove(f"{FOLDER_PATH}/{filename_output}")
+                os.remove(f"{FOLDER_PATH}/{filename_output_aci}")
 
         print('Add files to repository completed')
-        print('Creation secret')
 
+        print('Creation secret')
         # Create the secret using the create_secret() method
         repo.create_secret("GOOGLE_SHEETS_TAB_NAME"         , os.environ['GOOGLE_SHEETS_TAB_NAME'])
         repo.create_secret("GOOGLE_SHEETS_TOKEN_B64"        , os.environ['GOOGLE_SHEETS_TOKEN_B64'])
@@ -98,6 +112,7 @@ for item in data:
         repo.create_secret("CONTAINER_USER"                 , os.environ['CONTAINER_USER'])
         repo.create_secret("CONTAINER_PASS"                 , os.environ['CONTAINER_PASS'])
         repo.create_secret("MATRIX"                         , os.environ['MATRIX'])
+        repo.create_secret("AZURE_CREDENTIALS"              , os.environ['AZURE_CREDENTIALS'])
         print(f"Secret set correctly in the repository {REPO_NAME}.")
         print("----------------------------------------------------")
     except Exception as e:
