@@ -1,11 +1,11 @@
-name: __name___az
+name: __name___Az
 on:
   workflow_dispatch:
     inputs:
       accounts_ondemand:
         description: 'Enter the accounts, separated by commas'
-  schedule:
-    - cron: '__cron__'
+  #schedule:
+  #  - cron: '__cron__'
 
 env:
   ACI_PREFIX: "aci"
