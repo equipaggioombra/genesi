@@ -26,8 +26,9 @@ ACCOUNTS = base64.b64decode(ACCOUNTS).decode("utf-8")
 data = json.loads(ACCOUNTS)
 
 message = "Jobs will start tomorrow at:\n"
-startHours = 7
-endHours = 11
+# set in CET
+startHours = 10
+endHours = 12
 
 for item in data:
     print("ID: "        , item["id"])
@@ -53,7 +54,8 @@ for item in data:
 
         hour = random.randint(startHours, endHours)
         minute = random.randint(0, 59)
-        cron = f"{minute} {hour} * * *"
+        #set in UTC
+        cron = f"{minute} {hour-2} * * *"
 
         #message = message + f"{hour}:{minute} for {item['id']} - {item['account']}\n"
         message = message + f"{str(hour).zfill(2)}:{str(minute).zfill(2)} for {str(item['id']).zfill(3)} - {item['account']}\n"
@@ -72,17 +74,18 @@ for item in data:
         with open(os.path.join(FOLDER_PATH, filename_output), 'w') as file:
             file.write(filedata)
 
-        #print('Add files to repository az')
-        #cron = f"{minute} {hour + 7} * * *"
-        #filename_output_az = f".github/workflows/{REPO_NAME}_az.yml" 
-        #with open(os.path.join(FOLDER_PATH, filename_original_az), 'r') as file :
-        #    filedata = file.read()
-        #filedata = filedata.replace('__name__'      , REPO_NAME)
-        #filedata = filedata.replace('__cron__'      , cron)
-        #filedata = filedata.replace('__affinity__'  , item["id"])
-        #filedata = filedata.replace('__account__'   , item["account"])
-        #with open(os.path.join(FOLDER_PATH, filename_output_az), 'w') as file:
-        #    file.write(filedata)
+        print('Add files to repository az')
+        #set in UTC
+        cron = f"{minute} {hour+4} * * *"
+        filename_output_az = f".github/workflows/{REPO_NAME}_az.yml" 
+        with open(os.path.join(FOLDER_PATH, filename_original_az), 'r') as file :
+            filedata = file.read()
+        filedata = filedata.replace('__name__'      , REPO_NAME)
+        filedata = filedata.replace('__cron__'      , cron)
+        filedata = filedata.replace('__affinity__'  , item["id"])
+        filedata = filedata.replace('__account__'   , item["account"])
+        with open(os.path.join(FOLDER_PATH, filename_output_az), 'w') as file:
+            file.write(filedata)
 
         # Add the files from the folder to the repository
         exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_az.yml"]
