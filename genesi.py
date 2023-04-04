@@ -100,7 +100,7 @@ for item in data:
                 print(file_path_relative)
                 repo.create_file(file_path_relative, f"Added {file_path_relative}", contents)
         os.remove(f"{FOLDER_PATH}/{filename_output}")
-        #os.remove(f"{FOLDER_PATH}/{filename_output_az}")
+        os.remove(f"{FOLDER_PATH}/{filename_output_az}")
         print('Add files to repository completed')
 
         print('Creation secret')
