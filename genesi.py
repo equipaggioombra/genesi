@@ -8,10 +8,6 @@ import json
 #do "pip install PyGithub"
 from github import Github
 
-# Set account name and Github API access token
-#ACCOUNT_NAME = os.environ['GH_ACCOUNT']
-#ACCESS_TOKEN = os.environ['GH_TOKEN']
-
 # Set the path of the folder to upload to the repository
 FOLDER_PATH = "habanero"
 filename_original = ".github/workflows/workflow_orig.yml"
@@ -19,8 +15,6 @@ filename_original_az = ".github/workflows/workflow_orig_az.yml"
 
 ACCOUNTS = os.environ['GH_ACCOUNTS_B64']
 ACCOUNTS = base64.b64decode(ACCOUNTS).decode("utf-8")
-#ACCOUNTS = "W3sKICAiaWQiOiAiMiIsCiAgImFjY291bnQiOiAiYWMzMzRub3hAb3V0bG9vay5jb20iLAogICJ0b2tlbiI6ICJEYm1oSnAzdURDTjYiCiB9LCB7CiAgImlkIjogIjEiLAogICJhY2NvdW50IjogImFjMzM0bm94QG91dGxvb2suY29tIiwKICAidG9rZW4iOiAiRGJtaEpwM3VEQ042Igp9XQ=="
-
 #print(ACCOUNTS)
 
 data = json.loads(ACCOUNTS)
