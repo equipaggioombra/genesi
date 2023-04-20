@@ -36,4 +36,4 @@ jobs:
         MATRIX: ${{ secrets.MATRIX }}
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       run: |
-        python genesi2gh.py
+        python retry.py
