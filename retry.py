@@ -29,7 +29,7 @@ CONTAINER_PASS                  = os.environ['CONTAINER_PASS']
 MATRIX                          = os.environ['MATRIX']
 #AZURE_CREDENTIALS               = os.environ['AZURE_CREDENTIALS']
 
-message = "Jobs will start tomorrow at:\n"
+message = "RETRY - Jobs will start tomorrow at:\n"
 # set in CET
 startHours = 10
 endHours = 12
