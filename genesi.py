@@ -10,7 +10,7 @@ from github import Github
 
 # Set the path of the folder to upload to the repository
 FOLDER_PATH = "habanero"
-filename_original = ".github/workflows/workflow_orig.yml"
+filename_original = ".github/workflows/workflow_orig_farmer.yml"
 #filename_original_az = ".github/workflows/workflow_orig_az.yml"
 
 ACCOUNTS = os.environ['GH_ACCOUNTS_B64']
@@ -82,7 +82,7 @@ for item in data:
         #    file.write(filedata)
 
         # Add the files from the folder to the repository
-        exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_az.yml"]
+        exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_az.yml", "workflow_orig_farmer.yml"]
         for dirname, _, filenames in os.walk(FOLDER_PATH):
             for filename in filenames:
                 if filename in exclude_list:
