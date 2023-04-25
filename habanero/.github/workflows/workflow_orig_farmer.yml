@@ -1,4 +1,4 @@
-name: __name___farmer
+name: __name___farm
 on:
   workflow_dispatch:
     inputs:
@@ -78,6 +78,7 @@ jobs:
         unset the_pass
 
     - name: Run script
+      timeout-minutes: 30
       run: |
         echo "$(date) | INFO  | Configuring wasabi..."   
         echo $(echo ${{ secrets.GOOGLE_SHEETS_CREDENTIALS_B64 }} | base64 --decode) > google_sheets_credentials.json
@@ -88,7 +89,7 @@ jobs:
             --dont-check-for-updates \
             --on-finish 'exit' \
             --no-images \
-            --superfast \
+            --fast \
             --google-sheet google_sheets_credentials.json google_sheets_token.json ${{ secrets.GOOGLE_SHEETS_SHEET_ID }} ${{ secrets.GOOGLE_SHEETS_TAB_NAME }}
 
   notify:
