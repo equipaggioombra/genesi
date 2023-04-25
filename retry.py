@@ -36,7 +36,7 @@ endHours = 12
 
 for item in data:
     print("ID: "        , item["id"])
-    print("Account: "   , item["account"])
+    #print("Account: "   , item["account"])
     #print("Token: "    , item["token"])
     try:
         # Instantiate the Github object using the access token
@@ -62,7 +62,7 @@ for item in data:
                 response = requests.get("https://api.datamuse.com/words", params={"rel_jjb": "project"})
                 second_word = random.choice(response.json())["word"]
                 REPO_NAME = f"{first_word}-{second_word}"
-                print(REPO_NAME)
+                #print(REPO_NAME)
                 hour = random.randint(startHours, endHours)
                 minute = random.randint(0, 59)
                 #set in UTC
@@ -70,7 +70,7 @@ for item in data:
                 #message = message + f"{hour}:{minute} for {item['id']} - {item['account']}\n"
                 message = message + f"{str(hour).zfill(2)}:{str(minute).zfill(2)} for {str(item['id']).zfill(3)} - {item['account']}\n"
                 repo = g.get_user().create_repo(REPO_NAME)
-                print(f"Repository {REPO_NAME} creata correttamente")
+                print(f"Repository {REPO_NAME} created succesfully")
                 print('Add files to repository')
                 filename_output = f".github/workflows/{REPO_NAME}.yml" 
                 with open(os.path.join(FOLDER_PATH, filename_original), 'r') as file :
@@ -103,7 +103,7 @@ for item in data:
                         with open(file_path, "rb") as f:
                             contents = f.read()
                         file_path_relative = os.path.relpath(file_path, FOLDER_PATH)
-                        print(file_path_relative)
+                        #print(file_path_relative)
                         repo.create_file(file_path_relative, f"Added {file_path_relative}", contents)
                 os.remove(f"{FOLDER_PATH}/{filename_output}")
                 #os.remove(f"{FOLDER_PATH}/{filename_output_az}")
