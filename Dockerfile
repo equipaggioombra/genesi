@@ -27,8 +27,8 @@ RUN set -ex \
        python3-tk \
     # arm64 driver location
     && mkdir -p /usr/lib/chromium-browser/ \ 
-    && ln -s /usr/bin/chromedriver /usr/lib/chromium-browser/chromedriver
-    && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/bin/chromedriver /usr/lib/chromium-browser/chromedriver \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set display port as an environment variable
 ENV DISPLAY=:99
