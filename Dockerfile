@@ -20,15 +20,15 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -ex \
     && apt-get update --no-install-recommends -y \
     && apt-get install --no-install-recommends -y  \
-       chromium \
        chromium-driver \
+       chromium \
        gpg \
        tar \
        python3-tk \
-    && rm -rf /var/lib/apt/lists/* \
     # arm64 driver location
-	&& mkdir -p /usr/lib/chromium-browser/ \ 
-	&& ln -s /usr/bin/chromedriver /usr/lib/chromium-browser/chromedriver
+    && mkdir -p /usr/lib/chromium-browser/ \ 
+    && ln -s /usr/bin/chromedriver /usr/lib/chromium-browser/chromedriver
+    && rm -rf /var/lib/apt/lists/* \
 
 # Set display port as an environment variable
 ENV DISPLAY=:99
