@@ -7,7 +7,8 @@ echo "$(date) | INFO  | Configuring wasabi..."
 echo $(echo ${GOOGLE_SHEETS_CREDENTIALS_B64} | base64 --decode) > google_sheets_credentials.json
 echo $(echo ${GOOGLE_SHEETS_TOKEN_B64} | base64 --decode) > google_sheets_token.json
 
-echo '[{ "username": '${USER}', "password": '${PASS}' }]' > accounts.json
+#echo '[{ "username": '${USER}', "password": '${PASS}', "proxy": '${PROXY}' }]' > accounts.json
+echo '[{ "username": "'${USER}'", "password": "'${PASS}'", "proxy": "'${PROXY}'" }]' > accounts.json
 
 echo "$(date) | INFO  | Starting wasabi"      
 python ms_rewards_farmer.py \
@@ -15,4 +16,5 @@ python ms_rewards_farmer.py \
     --dont-check-for-updates \
     --no-images \
     --superfast \
+    --skip-if-proxy-dead \
     --google-sheet google_sheets_credentials.json google_sheets_token.json ${GOOGLE_SHEETS_SHEET_ID} ${GOOGLE_SHEETS_TAB_NAME}
