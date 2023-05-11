@@ -94,7 +94,9 @@ for item in data:
                             "LICENSE",
                             "workflow_orig_az.yml", 
                             "workflow_orig_farmer.yml", 
-                            "workflow_orig_farmer_proxy.yml"]        for dirname, _, filenames in os.walk(FOLDER_PATH):
+                            "workflow_orig_farmer_proxy.yml"]        
+        
+        for dirname, _, filenames in os.walk(FOLDER_PATH):
             for filename in filenames:
                 if filename in exclude_list:
                     continue
