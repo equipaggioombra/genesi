@@ -10,7 +10,8 @@ from github import Github
 
 # Set the path of the folder to upload to the repository
 FOLDER_PATH = "habanero"
-filename_original = ".github/workflows/workflow_orig_farmer.yml"
+#filename_original = ".github/workflows/workflow_orig.yml"
+filename_original = ".github/workflows/workflow_orig_farmer_proxy.yml"
 #filename_original_az = ".github/workflows/workflow_orig_az.yml"
 
 ACCOUNTS = os.environ['GH_ACCOUNTS_B64']
@@ -22,17 +23,19 @@ GOOGLE_SHEETS_SHEET_ID          = os.environ['GOOGLE_SHEETS_SHEET_ID']
 GOOGLE_SHEETS_CREDENTIALS_B64   = os.environ['GOOGLE_SHEETS_CREDENTIALS_B64']
 TELEGRAM_API_TOKEN              = os.environ['TELEGRAM_API_TOKEN']
 TELEGRAM_USERID                 = os.environ['TELEGRAM_USERID']
-GPG_PASSPHRASE                  = os.environ['GPG_PASSPHRASE']
-CONTAINER_IMAGE                 = os.environ['CONTAINER_IMAGE']
-CONTAINER_USER                  = os.environ['CONTAINER_USER']
-CONTAINER_PASS                  = os.environ['CONTAINER_PASS']
+#GPG_PASSPHRASE                  = os.environ['GPG_PASSPHRASE']
+#CONTAINER_IMAGE                 = os.environ['CONTAINER_IMAGE']
+#CONTAINER_USER                  = os.environ['CONTAINER_USER']
+#CONTAINER_PASS                  = os.environ['CONTAINER_PASS']
 MATRIX                          = os.environ['MATRIX']
+PROXY_USER                      = os.environ['PROXY_USER']
+PROXY_PASS                      = os.environ['PROXY_PASS']
 #AZURE_CREDENTIALS               = os.environ['AZURE_CREDENTIALS']
 
 message = "RETRY - Jobs will start tomorrow at:\n"
 # set in CET
 startHours = 10
-endHours = 12
+endHours = 11
 
 for item in data:
     print("ID: "        , item["id"])
@@ -94,7 +97,19 @@ for item in data:
                 #with open(os.path.join(FOLDER_PATH, filename_output_az), 'w') as file:
                 #    file.write(filedata)
                 # Add the files from the folder to the repository
-                exclude_list = ["workflow_orig.yml", ".DS_Store", "workflow_orig_az.yml", "workflow_orig_farmer.yml"]
+                # Add the files from the folder to the repository
+                exclude_list = ["workflow_orig.yml", 
+                                    ".DS_Store", 
+                                    "README.md",
+                                    "accounts.json.sample",
+                                    "setup.md",
+                                    "update.py",
+                                    "version.json",
+                                    "LICENSE",
+                                    "workflow_orig_az.yml", 
+                                    "workflow_orig_farmer.yml", 
+                                    "workflow_orig_farmer_proxy.yml"] 
+
                 for dirname, _, filenames in os.walk(FOLDER_PATH):
                     for filename in filenames:
                         if filename in exclude_list:
@@ -116,10 +131,10 @@ for item in data:
                 repo.create_secret("GOOGLE_SHEETS_CREDENTIALS_B64"  , GOOGLE_SHEETS_CREDENTIALS_B64)
                 repo.create_secret("TELEGRAM_API_TOKEN"             , TELEGRAM_API_TOKEN)
                 repo.create_secret("TELEGRAM_USERID"                , TELEGRAM_USERID)
-                repo.create_secret("GPG_PASSPHRASE"                 , GPG_PASSPHRASE)
-                repo.create_secret("CONTAINER_IMAGE"                , CONTAINER_IMAGE)
-                repo.create_secret("CONTAINER_USER"                 , CONTAINER_USER)
-                repo.create_secret("CONTAINER_PASS"                 , CONTAINER_PASS)
+                #repo.create_secret("GPG_PASSPHRASE"                 , GPG_PASSPHRASE)
+                #repo.create_secret("CONTAINER_IMAGE"                , CONTAINER_IMAGE)
+                #repo.create_secret("CONTAINER_USER"                 , CONTAINER_USER)
+                #repo.create_secret("CONTAINER_PASS"                 , CONTAINER_PASS)
                 repo.create_secret("MATRIX"                         , MATRIX)
                 #repo.create_secret("AZURE_CREDENTIALS"              , AZURE_CREDENTIALS)
                 print(f"Secret set correctly in the repository {REPO_NAME}.")
@@ -134,7 +149,10 @@ for item in data:
                 }
                 # Impostare il corpo della richiesta con il nome del branch target per il workflow
                 payload = {
-                    "ref": "main"
+                    "ref": "main",
+                    "inputs": {
+                        "accounts_ondemand": ""
+                    }
                 }
                 # Effettuare la richiesta HTTP POST per inviare l'evento di dispatch
                 response = requests.post(url, headers=headers, json=payload)
